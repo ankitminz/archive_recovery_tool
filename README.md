@@ -11,7 +11,7 @@
 * 7z
 * rar
 
-*rar requires UnRAR.exe to be in same directory or its path is provided in environment variables. It is already provided with Craker.exe executable. Use can also get it by downloading WinRAR*
+*rar requires UnRAR.exe to be in same directory or its path has to be provided in environment variables. It is already provided with Craker.exe executable. Use can also get it by downloading WinRAR*
 
 ## Speed of brute forcing various archive formats:
 * zip - *testing in progress*
