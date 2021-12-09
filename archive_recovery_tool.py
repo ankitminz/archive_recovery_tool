@@ -8,33 +8,34 @@ import msvcrt
 
 
 A_Z = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
 a_z = "abcdefghijklmnopqrstuvwxyz"
-
 symbols = " !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
-
 nums = "0123456789"
-
 master = nums + a_z + A_Z + symbols
 
-path = input("Type in the complete path of archive file\n")
-global file_type
-file_type = 0    #0-zip, 1-7z, 2-rar
+global file_type #0-zip, 1-7z, 2-rar
 
-if path.endswith('.zip'):
-    file_type = 0
-elif path.endswith('.7z'):
-    file_type = 1
-elif path.endswith('.rar'):
-    file_type = 2
+while(True):
+    path = input("Type in the complete path of archive file\n")
+    if path.endswith('.zip'):
+        file_type = 0
+        break
+    elif path.endswith('.7z'):
+        file_type = 1
+        break
+    elif path.endswith('.rar'):
+        file_type = 2
+        break
+    else:
+        print("\nGiven file type is not supported. Only zip, 7z, and rar are supported")
 
 path = path.replace("\\", "/")
 path = Path(path)
-print("Default path of extraction is the directory of this program")
+print("\nDefault path of extraction is the directory of this program")
 custom = int(input("Type 1 or 2 according to your choice\n1. Give custom extraction path\n2. Keep default extraction path\n"))
 
 if custom == 1:
-    ex_path = input("Type in your custom extraction path\n")
+    ex_path = input("\nType in your custom extraction path\n")
     ex_path = ex_path.replace("\\", "/")
     ex_path = Path(ex_path)
 elif custom == 2:
@@ -71,45 +72,58 @@ def zip_extractor(password, start, count, ex_path):
     '''Function to extract zip file encrypted with AES'''
     
     flag = False
-    with pyzipper.AESZipFile(path, 'r') as zf:
-        try:
-            zf.extractall(path = ex_path, pwd = bytes(password.encode('utf8')))
-            print("\n\nPassword found = {}".format(password), end = '')
-            flag = True
-            return flag
-        except:
-            if msvcrt.kbhit():
-                msvcrt.getch()
+    try:
+        with pyzipper.AESZipFile(path, 'r') as zf:
+            try:
+                zf.extractall(path = ex_path, pwd = bytes(password.encode('utf8')))
+                print("\n\nPassword found = {}".format(password), end = '')
                 flag = True
                 return flag
+            except:
+                if msvcrt.kbhit():
+                    msvcrt.getch()
+                    flag = True
+                    return flag
+                
+                t = time.monotonic() - start
+                t = convertf(t)
+                print("\rElapsed time = {}:{}:{} Attempt = {} Password failed = {}                    "
+                .format(t[0], t[1], t[2], count, password), end = '', flush = True)
             
-            t = time.monotonic() - start
-            t = convertf(t)
-            print("\rElapsed time = {}:{}:{} Attempt = {} Password failed = {}                    "
-            .format(t[0], t[1], t[2], count, password), end = '', flush = True)
-
-
+    except(FileNotFoundError):
+        print("\nNo such file or directory found")
+        return True
+    except:
+        print("\nOops! some error occured")
+        return True
+    
+    
 def sevenz_extractor(password, start, count, ex_path):
 
     '''Function to extract 7z file'''
     
     flag = False
-    with py7zr.SevenZipFile(path, mode = 'r', password = password) as szf:
-        try:
-            szf.extractall(path = ex_path)
-            print("\n\npassword found = {}".format(password))
-            flag = True
-            return flag
-        except:
-            if msvcrt.kbhit():
-                msvcrt.getch()
+    try:
+        with py7zr.SevenZipFile(path, mode = 'r', password = password) as szf:
+            try:
+                szf.extractall(path = ex_path)
+                print("\n\npassword found = {}".format(password))
                 flag = True
                 return flag
-            
-            t = time.monotonic() - start
-            t = convertf(t)
-            print("\rElapsed time = {}:{}:{} Attempt = {} Password failed = {}                     "
-            .format(t[0], t[1], t[2], count, password), end = '', flush = True)
+            except:
+                if msvcrt.kbhit():
+                    msvcrt.getch()
+                    flag = True
+                    return flag
+                
+                t = time.monotonic() - start
+                t = convertf(t)
+                print("\rElapsed time = {}:{}:{} Attempt = {} Password failed = {}                     "
+                .format(t[0], t[1], t[2], count, password), end = '', flush = True)
+    except(FileNotFoundError):
+        print("\nNo such file or directory found")
+        return True
+    
 
 
 def rar_extractor(password, start, count, ex_path):
@@ -117,22 +131,27 @@ def rar_extractor(password, start, count, ex_path):
     '''Function to extract rar file'''
     
     flag = False
-    with rarfile.RarFile(path) as rf:
-        try:
-            rf.extractall(path = ex_path, pwd = bytes(password.encode('utf8')))
-            print("\n\nPassword found = {}".format(password))
-            flag = True
-            return flag
-        except:
-            if msvcrt.kbhit():
-                msvcrt.getch()
+    try:
+        with rarfile.RarFile(path) as rf:
+            try:
+                rf.extractall(path = ex_path, pwd = bytes(password.encode('utf8')))
+                print("\n\nPassword found = {}".format(password))
                 flag = True
                 return flag
-            
-            t = time.monotonic() - start
-            t = convertf(t)
-            print("\rElapsed time = {}:{}:{} Attempt = {} Password failed = {}                     "
-            .format(t[0], t[1], t[2], count, password), end = '', flush = True)
+            except:
+                if msvcrt.kbhit():
+                    msvcrt.getch()
+                    flag = True
+                    return flag
+                
+                t = time.monotonic() - start
+                t = convertf(t)
+                print("\rElapsed time = {}:{}:{} Attempt = {} Password failed = {}                     "
+                .format(t[0], t[1], t[2], count, password), end = '', flush = True)
+    except(FileNotFoundError):
+        print("\nNo such file or directory found")
+        return True
+    
 
 
 def brute_force(extractor, characters, min_len, max_len, prefix, suffix):
@@ -184,17 +203,17 @@ global flag3
 flag3 = True
 
 while flag3 == True:
-    method = int(input("Choose the type of attack. Type 1, 2 or 3 according to your choice\n1. Dictionary attack\n2. Brute force attack\n3. Exit\n"))
+    method = int(input("\nChoose the type of attack. Type 1, 2 or 3 according to your choice\n1. Dictionary attack\n2. Brute force attack\n3. Exit\n"))
 
     if method == 1:
-        dict_path = input("Type in the path of dictionary\n")
+        dict_path = input("\nType in the path of dictionary\n")
         dict_path = dict_path.replace("\\", "/")
         dict_path = Path(dict_path)
        
     elif method == 2:
-        min_len = int(input("Type in minimum lenght of password\n"))
-        max_len = int(input("Type in maximum length of password\n"))
-        method_2 = int(input("Choose the character set. Type 1, 2, 3, 4, 5 or 6 according to your choice.\n1. {}\n2. {}\n3. {}\n4. {}\n5. {}\n6. Want to give your own charcater set\n".format(nums, a_z, A_Z, symbols, master)))
+        min_len = int(input("\nType in minimum lenght of password\n"))
+        max_len = int(input("\nType in maximum length of password\n"))
+        method_2 = int(input("\nChoose the character set. Type 1, 2, 3, 4, 5 or 6 according to your choice.\n1. {}\n2. {}\n3. {}\n4. {}\n5. {}\n6. Want to give your own charcater set\n".format(nums, a_z, A_Z, symbols, master)))
     
         if method_2 == 1:
             char_set = nums
@@ -209,26 +228,26 @@ while flag3 == True:
         elif method_2 == 6:
             char_set = input("Type in your own characters\n")
         else:
-            print("Type 1, 2, 3, 4, 5 or 6 as choice")
+            print("\nType 1, 2, 3, 4, 5 or 6 as choice")
             continue
     elif method == 3:
         break
     else:
-        print("Type 1, 2 or 3 as choice")
+        print("\nType 1, 2 or 3 as choice")
         continue
     
     while True:
-        method_1 = int(input("Type 1, 2, 3, 4 or 5 according to your choice\n1. Give prefix\n2. Give suffix\n3. Give both prefix & suffix\n4. Neither prefix nor suffix\n5. Back\n"))
+        method_1 = int(input("\nType 1, 2, 3, 4 or 5 according to your choice\n1. Give prefix\n2. Give suffix\n3. Give both prefix & suffix\n4. Neither prefix nor suffix\n5. Back\n"))
     
         if method_1 == 1:
-            prefix = input("Type the prefix\n")
+            prefix = input("\nType the prefix\n")
             suffix = ""
         elif method_1 == 2:
-            suffix = input("Type the suffix\n")
+            suffix = input("\nType the suffix\n")
             prefix = ""
         elif method_1 == 3:
-            prefix = input("Type the prefix\n")
-            suffix = input("Type the suffix\n")
+            prefix = input("\nType the prefix\n")
+            suffix = input("\nType the suffix\n")
         elif method_1 == 4:
             prefix = ""
             suffix = ""
@@ -236,7 +255,7 @@ while flag3 == True:
             flag2 = True
             break
         else:
-            print("Type 1, 2, 3, 4 or 5 as choice")
+            print("\nType 1, 2, 3, 4 or 5 as choice")
             continue
         
         if method == 1:
