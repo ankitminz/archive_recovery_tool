@@ -1,0 +1,8 @@
+1. Making a new directory in current directory of archive and extracting in it by default.
+   Appending number to new directory name if their is name clash.
+
+2. Showing error instead of crashing in case of encrypted file names in 7z and rar.
+
+3. Handling invalid user inputs.
+
+4. Write clear prompts.
