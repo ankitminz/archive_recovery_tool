@@ -3,6 +3,7 @@ import py7zr
 import rarfile
 import itertools
 import time
+import os
 
 
 A_Z = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -27,15 +28,36 @@ while(True):
     else:
         print("\nGiven file type is not supported. Only zip, 7z, and rar are supported")
 
-print("\nDefault path of extraction is the directory of this program")
-custom = int(input("Type 1 or 2 according to your choice\n1. Give custom extraction path\n2. Keep default extraction path\n"))
+print("\nBy default a new directory having same name as that of archive will be made in this parent directory and all contents of archive will be extracted in it")
 
-if custom == 1:
-    ex_path = input("\nType in your custom extraction path\n")
-elif custom == 2:
-    ex_path = None
-else:
-    ex_path = None
+
+while(True):
+    try:
+        custom = int(input("1. Give custom extraction path\n2. Keep default extraction path\n"))
+        if custom == 1:
+            ex_path = input("\nType in your custom extraction path\n")
+            break
+        elif custom == 2:
+            index1 = path.rfind("\\")
+            index2 = path.rfind(".")
+            directoryName = path[index1 + 1 : index2]
+            parentDirectory = path[:index1 + 1]
+            directoryPath = parentDirectory + directoryName
+            ex_path = directoryPath
+            i = 0
+            while(True):
+                try:
+                    os.mkdir(ex_path)
+                    break
+                except(FileExistsError):
+                    i += 1
+                    ex_path = directoryPath + str(i)
+                    
+            break
+        else:
+            print("\nEnter 1 or 2")
+    except(ValueError):
+        print("\nEnter 1 or 2")
 
 
 
@@ -108,6 +130,9 @@ def sevenz_extractor(password, start, count, ex_path):
     except(FileNotFoundError):
         print("\nNo such file or directory found")
         return True
+    except Exception as e:
+        print("\n{}".format(e))
+        return True
     
 
 
@@ -131,6 +156,9 @@ def rar_extractor(password, start, count, ex_path):
                 
     except(FileNotFoundError):
         print("\nNo such file or directory found")
+        return True
+    except Exception as e:
+        print("\n{}".format(e))
         return True
     
 
@@ -178,96 +206,119 @@ def dictionary_attack(extractor, dict_path, prefix, suffix):
                 count += 1
 
 
-global flag2
-flag2 = False
-global flag3
-flag3 = True
+method1 = 0
+dict_path = ""
+min_len = 0
+max_len = 0
+char_set = ""
+prefix = ""
+suffix = ""
 
-while flag3 == True:
-    method = int(input("\nChoose the type of attack. Type 1, 2 or 3 according to your choice\n1. Dictionary attack\n2. Brute force attack\n3. Exit\n"))
+print()
+while(True):
+    try:
+        method1 = int(input("Choose the type of attack.\n1. Dictionary attack\n2. Brute force attack\n"))
 
-    if method == 1:
-        dict_path = input("\nType in the path of dictionary\n")
-        dict_path = dict_path.replace("\\", "/")
-        dict_path = Path(dict_path)
-       
-    elif method == 2:
-        min_len = int(input("\nType in minimum lenght of password\n"))
-        max_len = int(input("\nType in maximum length of password\n"))
-        method_2 = int(input("\nChoose the character set. Type 1, 2, 3, 4, 5 or 6 according to your choice.\n1. {}\n2. {}\n3. {}\n4. {}\n5. {}\n6. Want to give your own charcater set\n".format(nums, a_z, A_Z, symbols, master)))
-    
-        if method_2 == 1:
-            char_set = nums
-        elif method_2 == 2:
-            char_set = a_z
-        elif method_2 == 3:
-            char_set = A_Z
-        elif method_2 == 4:
-            char_set = symbols
-        elif method_2 == 5:
-            char_set = master
-        elif method_2 == 6:
-            char_set = input("Type in your own characters\n")
-        else:
-            print("\nType 1, 2, 3, 4, 5 or 6 as choice")
-            continue
-    elif method == 3:
-        break
-    else:
-        print("\nType 1, 2 or 3 as choice")
-        continue
-    
-    while True:
-        method_1 = int(input("\nType 1, 2, 3, 4 or 5 according to your choice\n1. Give prefix\n2. Give suffix\n3. Give both prefix & suffix\n4. Neither prefix nor suffix\n5. Back\n"))
-    
-        if method_1 == 1:
-            prefix = input("\nType the prefix\n")
-            suffix = ""
-        elif method_1 == 2:
-            suffix = input("\nType the suffix\n")
-            prefix = ""
-        elif method_1 == 3:
-            prefix = input("\nType the prefix\n")
-            suffix = input("\nType the suffix\n")
-        elif method_1 == 4:
-            prefix = ""
-            suffix = ""
-        elif method_1 == 5:
-            flag2 = True
+        if method1 == 1:
+            dict_path = input("\nType in the path of dictionary\n")
+            break
+            
+        elif method1 == 2:
+            print()
+            while(True):
+                try:
+                    min_len = int(input("Type in minimum lenght of password\n"))
+                    if(min_len > 0):
+                        break
+                    else:
+                        print("\nEnter a positive integer greater than 0")
+                except(ValueError):
+                    print("\nEnter a positive integer greater than 0")
+            print()
+            
+            while(True):
+                try:
+                    max_len = int(input("Type in maximum length of password\n"))
+                    if(max_len >= min_len):
+                        break
+                    else:
+                        print("\nEnter a positive integer greater than or equal to {}".format(min_len))
+                except(ValueError):
+                    print("\nEnter a positive integer greater than or equal to {}".format(min_len))
+            
+            print()
+            while(True):
+                try:
+                    method2 = int(input("Choose the character set.\n1. {}\n2. {}\n3. {}\n4. {}\n5. {}\n6. Give your own charcater set\n".format(nums, a_z, A_Z, symbols, master)))
+                
+                    if method2 == 1:
+                        char_set = nums
+                        break
+                    elif method2 == 2:
+                        char_set = a_z
+                        break
+                    elif method2 == 3:
+                        char_set = A_Z
+                        break
+                    elif method2 == 4:
+                        char_set = symbols
+                        break
+                    elif method2 == 5:
+                        char_set = master
+                        break
+                    elif method2 == 6:
+                        char_set = input("Enter your own characters\n")
+                        break
+                    else:
+                        print("\nEnter 1, 2, 3, 4, 5 or 6")
+                except(ValueError):
+                    print("\nEnter 1, 2, 3, 4, 5 or 6")
             break
         else:
-            print("\nType 1, 2, 3, 4 or 5 as choice")
-            continue
-        
-        if method == 1:
-            if file_type == 0:
-                dictionary_attack(zip_extractor, dict_path, prefix, suffix)
-                flag3 = False
-                break
-            elif file_type == 1:
-                dictionary_attack(sevenz_extractor, dict_path, prefix, suffix)
-                flag3 = False
-                break
-            elif file_type == 2:
-                dictionary_attack(rar_extractor, dict_path, prefix, suffix)
-                flag3 = False
-                break
-        elif method == 2:
-            if file_type == 0:
-                brute_force(zip_extractor, char_set, min_len, max_len, prefix, suffix)
-                flag3 = False
-                break
-            elif file_type == 1:
-                brute_force(sevenz_extractor, char_set, min_len, max_len, prefix, suffix)
-                flag3 = False
-                break
-            elif file_type == 2:
-                brute_force(rar_extractor, char_set, min_len, max_len, prefix, suffix)
-                flag3 = False
-                break
-            
-    if flag2 == True:
-        continue
+            print("\nEnter 1 or 2")
+    except(ValueError):
+        print("\nEnter 1 or 2")
+
+print()
+while(True):
+    try:
+        method3 = int(input("Additional options\n1. Give prefix\n2. Give suffix\n3. Give both prefix & suffix\n4. Neither prefix nor suffix\n"))
+
+        if method3 == 1:
+            prefix = input("\nType the prefix\n")
+            suffix = ""
+            break
+        elif method3 == 2:
+            suffix = input("\nType the suffix\n")
+            prefix = ""
+            break
+        elif method3 == 3:
+            prefix = input("\nType the prefix\n")
+            suffix = input("\nType the suffix\n")
+            break
+        elif method3 == 4:
+            prefix = ""
+            suffix = ""
+            break
+        else:
+            print("\nEnter 1, 2, 3 or 4")
+    except(ValueError):
+        print("\nEnter 1, 2, 3 or 4")
+    
+if method1 == 1:
+    if file_type == 0:
+        dictionary_attack(zip_extractor, dict_path, prefix, suffix)
+    elif file_type == 1:
+        dictionary_attack(sevenz_extractor, dict_path, prefix, suffix)
+    elif file_type == 2:
+        dictionary_attack(rar_extractor, dict_path, prefix, suffix)
+elif method1 == 2:
+    if file_type == 0:
+        brute_force(zip_extractor, char_set, min_len, max_len, prefix, suffix)
+    elif file_type == 1:
+        brute_force(sevenz_extractor, char_set, min_len, max_len, prefix, suffix)
+    elif file_type == 2:
+        brute_force(rar_extractor, char_set, min_len, max_len, prefix, suffix)
     
 print("\nProcess completed\n")
 input()
