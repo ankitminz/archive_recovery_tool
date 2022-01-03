@@ -2,9 +2,7 @@ import pyzipper
 import py7zr
 import rarfile
 import itertools
-from pathlib import Path
 import time
-import msvcrt
 
 
 A_Z = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -29,15 +27,11 @@ while(True):
     else:
         print("\nGiven file type is not supported. Only zip, 7z, and rar are supported")
 
-path = path.replace("\\", "/")
-path = Path(path)
 print("\nDefault path of extraction is the directory of this program")
 custom = int(input("Type 1 or 2 according to your choice\n1. Give custom extraction path\n2. Keep default extraction path\n"))
 
 if custom == 1:
     ex_path = input("\nType in your custom extraction path\n")
-    ex_path = ex_path.replace("\\", "/")
-    ex_path = Path(ex_path)
 elif custom == 2:
     ex_path = None
 else:
@@ -80,11 +74,6 @@ def zip_extractor(password, start, count, ex_path):
                 flag = True
                 return flag
             except:
-                if msvcrt.kbhit():
-                    msvcrt.getch()
-                    flag = True
-                    return flag
-                
                 t = time.monotonic() - start
                 t = convertf(t)
                 print("\rElapsed time = {}:{}:{} Attempt = {} Password failed = {}                    "
@@ -111,15 +100,11 @@ def sevenz_extractor(password, start, count, ex_path):
                 flag = True
                 return flag
             except:
-                if msvcrt.kbhit():
-                    msvcrt.getch()
-                    flag = True
-                    return flag
-                
                 t = time.monotonic() - start
                 t = convertf(t)
                 print("\rElapsed time = {}:{}:{} Attempt = {} Password failed = {}                     "
                 .format(t[0], t[1], t[2], count, password), end = '', flush = True)
+                
     except(FileNotFoundError):
         print("\nNo such file or directory found")
         return True
@@ -139,15 +124,11 @@ def rar_extractor(password, start, count, ex_path):
                 flag = True
                 return flag
             except:
-                if msvcrt.kbhit():
-                    msvcrt.getch()
-                    flag = True
-                    return flag
-                
                 t = time.monotonic() - start
                 t = convertf(t)
                 print("\rElapsed time = {}:{}:{} Attempt = {} Password failed = {}                     "
                 .format(t[0], t[1], t[2], count, password), end = '', flush = True)
+                
     except(FileNotFoundError):
         print("\nNo such file or directory found")
         return True
