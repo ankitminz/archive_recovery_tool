@@ -104,8 +104,8 @@ def zip_extractor(password, start, count, ex_path):
     except(FileNotFoundError):
         print("\nNo such file or directory found")
         return True
-    except:
-        print("\nOops! some error occured")
+    except Exception as e:
+        print("\n{}".format(e))
         return True
     
     
@@ -165,10 +165,9 @@ def rar_extractor(password, start, count, ex_path):
 
 def brute_force(extractor, characters, min_len, max_len, prefix, suffix):
     
-    '''Function which will do iteration of all possible password combinations in characters 
-    also known as brute force attack'''
+    '''Function to iterate all permutation with repetition'''
     
-    print("Press any button on keyboard to stop and exit the program (For Windows users only)\nUsers of other platforms should force stop the program to stop and exit it while it is in operation")
+    print("\nIn progress")
     start = time.monotonic()
     count = 1
     flag = False
@@ -190,7 +189,7 @@ def dictionary_attack(extractor, dict_path, prefix, suffix):
     '''Function to do dictionary attack
     It will try each word separated by new line in given dictionary'''
     
-    print("Press any button on keyboard to stop and exit the program (For Windows users only)\nUsers of other platforms should force stop the program to stop and exit it while it is in operation") 
+    print("\nIn progress") 
     flag1 = False
     count = 1
     start = time.monotonic()
@@ -220,14 +219,14 @@ while(True):
         method1 = int(input("Choose the type of attack.\n1. Dictionary attack\n2. Brute force attack\n"))
 
         if method1 == 1:
-            dict_path = input("\nType in the path of dictionary\n")
+            dict_path = input("\nEnter path of dictionary\n")
             break
             
         elif method1 == 2:
             print()
             while(True):
                 try:
-                    min_len = int(input("Type in minimum lenght of password\n"))
+                    min_len = int(input("Enter minimum lenght of password\n"))
                     if(min_len > 0):
                         break
                     else:
@@ -238,7 +237,7 @@ while(True):
             
             while(True):
                 try:
-                    max_len = int(input("Type in maximum length of password\n"))
+                    max_len = int(input("Enter maximum length of password\n"))
                     if(max_len >= min_len):
                         break
                     else:
