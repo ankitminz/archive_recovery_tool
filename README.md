@@ -1,15 +1,16 @@
 # Archive recovery tool - Craker
-**Craker** is a brute force archive recovery tool written entirely in python. It is a console app with no fancy gui.
+**Craker** is a brute force password recovery tool written entirely in python. It is a console app with no fancy gui.
 
 ## Supported platform:
 * Windows
 
 *However the source code might run fine on any platform which has python installed with required modules*
 
-## Supported archive formats:
+## Supported file formats:
 * zip
 * 7z
 * rar
+* pdf
 
 *rar requires UnRAR.exe to be in same directory or its path has to be provided in environment variables. It is already provided with Craker.exe executable. Use can also get it by downloading WinRAR*
 
@@ -24,4 +25,5 @@
 * CPU and memory usage is negligible
 
 ## Cons:
-* Very slow especially for 7z and rar archives
+* Very slow especially for 7z, rar and pdf
+* Archives with encrypted file names and pdf encrypted with AES are not supported
