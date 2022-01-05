@@ -13,11 +13,6 @@
 
 *rar requires UnRAR.exe to be in same directory or its path has to be provided in environment variables. It is already provided with Craker.exe executable. Use can also get it by downloading WinRAR*
 
-## Speed of brute forcing various archive formats:
-* zip - *testing in progress*
-* 7z - *testing in progress*
-* rar - *testing in progress*
-
 ## Features:
 * It provides two methods:
   * Brute force using charcter set
@@ -28,11 +23,5 @@
 * It shows elapsed time
 * CPU and memory usage is negligible
 
-*I have opted not to show estimated time because that would slow down the process*
-
 ## Cons:
-* Very slow especially for 7z and rar archives *this is because of next point*
-* Didn't use GPU
-
-## Last thoughts
-You can recover your data by using its full potential. Use it responsibly
+* Very slow especially for 7z and rar archives
