@@ -4,6 +4,7 @@ import rarfile
 import itertools
 import time
 import os
+from PyPDF2 import PdfFileReader, PdfFileWriter
 
 
 A_Z = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -12,10 +13,10 @@ symbols = " !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
 nums = "0123456789"
 master = nums + a_z + A_Z + symbols
 
-global file_type #0-zip, 1-7z, 2-rar
+global file_type #0-zip, 1-7z, 2-rar, 3-pdf
 
 while(True):
-    path = input("Type in the complete path of archive file\n")
+    path = input("Type in the complete path of file\n")
     if path.endswith('.zip'):
         file_type = 0
         break
@@ -25,10 +26,13 @@ while(True):
     elif path.endswith('.rar'):
         file_type = 2
         break
+    elif path.endswith('.pdf'):
+        file_type = 3
+        break
     else:
-        print("\nGiven file type is not supported. Only zip, 7z, and rar are supported")
+        print("\nGiven file type is not supported. Only zip, 7z, rar and pdf are supported")
 
-print("\nBy default a new directory having same name as that of archive will be made in this parent directory and all contents of archive will be extracted in it")
+print("\nBy default a new directory having same name as that of archive will be made in this parent directory and all contents of archive will be extracted in it. Pdf file is extracted in same directory as that of original file by default and '_decrypted' is appended to its name.")
 
 
 while(True):
@@ -38,13 +42,20 @@ while(True):
             ex_path = input("\nType in your custom extraction path\n")
             break
         elif custom == 2:
+            i = 0
+            if(file_type == 3):
+                directoryPath = "".join([path[:-4], "_decrypted.pdf"])
+                ex_path = directoryPath
+                while(os.path.isfile(ex_path)):
+                    i += 1
+                    ex_path = directoryPath[:-4] + str(i) + ".pdf"
+                break
             index1 = path.rfind("\\")
             index2 = path.rfind(".")
             directoryName = path[index1 + 1 : index2]
             parentDirectory = path[:index1 + 1]
             directoryPath = parentDirectory + directoryName
             ex_path = directoryPath
-            i = 0
             while(True):
                 try:
                     os.mkdir(ex_path)
@@ -92,7 +103,7 @@ def zip_extractor(password, start, count, ex_path):
         with pyzipper.AESZipFile(path, 'r') as zf:
             try:
                 zf.extractall(path = ex_path, pwd = bytes(password.encode('utf8')))
-                print("\n\nPassword found = {}".format(password), end = '')
+                print("\n\nFile decrypted successfully\nPassword found = {}".format(password), end = '')
                 flag = True
                 return flag
             except:
@@ -118,7 +129,7 @@ def sevenz_extractor(password, start, count, ex_path):
         with py7zr.SevenZipFile(path, mode = 'r', password = password) as szf:
             try:
                 szf.extractall(path = ex_path)
-                print("\n\npassword found = {}".format(password))
+                print("\n\nFile decrypted successfully\nPassword found = {}".format(password))
                 flag = True
                 return flag
             except:
@@ -145,7 +156,7 @@ def rar_extractor(password, start, count, ex_path):
         with rarfile.RarFile(path) as rf:
             try:
                 rf.extractall(path = ex_path, pwd = bytes(password.encode('utf8')))
-                print("\n\nPassword found = {}".format(password))
+                print("\n\nFile decrypted successfully\nPassword found = {}".format(password))
                 flag = True
                 return flag
             except:
@@ -161,6 +172,42 @@ def rar_extractor(password, start, count, ex_path):
         print("\n{}".format(e))
         return True
     
+
+
+def pdf_extractor(password, start, count, ex_path):
+    
+    '''Function to extract encrypted pdf file'''
+    
+    flag = False
+    myFile = PdfFileReader(path)
+    if myFile.isEncrypted == True:
+        try:
+            myFile.decrypt(password)
+            out = PdfFileWriter()
+            for idx in range(myFile.numPages):
+                page = myFile.getPage(idx)
+                out.addPage(page)
+
+            with open(ex_path, "wb") as f:
+                out.write(f)
+                print("\n\nFile decrypted Successfully.")
+   
+            print("Password found = {}".format(password), end = '')
+            flag = True
+            return flag
+        except(NotImplementedError):
+            print("NotImplementedError: Only 40 and 128 bit RC4 algorithm is suported")
+            return True
+        except:
+            t = time.monotonic() - start
+            t = convertf(t)
+            print("\rElapsed time = {}:{}:{} Attempt = {} Password failed = {}                    "
+            .format(t[0], t[1], t[2], count, password), end = '', flush = True)
+
+    else:
+        print("\nFile already decrypted.")
+        return True
+
 
 
 def brute_force(extractor, characters, min_len, max_len, prefix, suffix):
@@ -311,6 +358,8 @@ if method1 == 1:
         dictionary_attack(sevenz_extractor, dict_path, prefix, suffix)
     elif file_type == 2:
         dictionary_attack(rar_extractor, dict_path, prefix, suffix)
+    elif file_type == 3:
+        dictionary_attack(pdf_extractor, dict_path, prefix, suffix)
 elif method1 == 2:
     if file_type == 0:
         brute_force(zip_extractor, char_set, min_len, max_len, prefix, suffix)
@@ -318,6 +367,8 @@ elif method1 == 2:
         brute_force(sevenz_extractor, char_set, min_len, max_len, prefix, suffix)
     elif file_type == 2:
         brute_force(rar_extractor, char_set, min_len, max_len, prefix, suffix)
+    elif file_type == 3:
+        brute_force(pdf_extractor, char_set, min_len, max_len, prefix, suffix)
     
 print("\nProcess completed\n")
 input()
