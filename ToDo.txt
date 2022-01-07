@@ -22,3 +22,6 @@ Known Issue-
    different lock password and permission password, only lock password is found and no 
    iteration is done to find password which restrict permission, however all permission 
    restrictions are removed even if permission password is not found.
+
+3. Neither any error is thrown nor program crash when UnRAR.exe is not in same directory of
+   craker.exe while working on rar archives.
