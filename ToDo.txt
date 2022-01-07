@@ -12,7 +12,8 @@ Done-
 
 3. Handling invalid user inputs.
 
-4. Write clear prompts.
+4. Showing error when UnRAR.exe is not in same directory of craker.py or craker.exe and user
+   tries to open rar archive.
 
 
 Known Issue-
@@ -22,6 +23,3 @@ Known Issue-
    different lock password and permission password, only lock password is found and no 
    iteration is done to find password which restrict permission, however all permission 
    restrictions are removed even if permission password is not found.
-
-3. Neither any error is thrown nor program crash when UnRAR.exe is not in same directory of
-   craker.exe while working on rar archives.

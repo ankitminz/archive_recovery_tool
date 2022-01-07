@@ -2,7 +2,7 @@
 **Craker** is a brute force password recovery tool written entirely in python. It is a console app with no fancy gui.
 
 ## Supported platform:
-* Windows
+* Windows 10
 
 *However the source code might run fine on any platform which has python installed with required modules*
 
