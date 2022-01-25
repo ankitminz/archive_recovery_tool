@@ -45,3 +45,7 @@
 ## Cons:
 * Very slow especially for 7z, rar and pdf
 * Archives with encrypted file names and pdf encrypted with AES are not supported
+
+## Known Issues
+* Program is neither crashing nor showing error in case of encrypted file names in rar. And shows wrong password found.
+* Pdf file with only permission restriction show wrong password found and only lock password is found in pdf files with different lock password and permission password, however all permission restrictions are removed even if permission password is not found.
