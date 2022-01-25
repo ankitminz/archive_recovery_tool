@@ -6,6 +6,10 @@
 2. If you are trying to recover password of rar file then put UnRAR.exe in same directory of craker.exe or craker.py. You'll need to download WinRAR from https://www.win-rar.com/start.html?&L=0. Default directory of UnRAR.exe is `C:\Program Files (x86)\WinRAR\` or `C:\Program Files\WinRAR\` depending on whether it is 32-bit or 64-bit.
 3. Then run the executable by double clicking it or python script from terminal *(cmd or powershell)* and follow instructions.
 
+![python script](https://github.com/ankitminz/archive_recovery_tool/blob/SecondMain/Images/crakerExample1.png "python script")
+
+![windows executable](https://github.com/ankitminz/archive_recovery_tool/blob/SecondMain/Images/crakerExample2.png "windows executable")
+
 ## Supported file formats:
 * zip
 * 7z
