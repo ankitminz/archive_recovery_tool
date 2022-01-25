@@ -20,7 +20,6 @@ Known Issue-
 1. Program is neither crashing nor showing error in case of encrypted file names in rar.
    And shows wrong password found.
 
-2. Pdf file with only permission restriction show wrong password found and those file with
-   different lock password and permission password, only lock password is found and no 
-   iteration is done to find password which restrict permission, however all permission 
-   restrictions are removed even if permission password is not found.
+2. Pdf file with only permission restriction show wrong password found and only lock 
+   password is found in pdf files with different lock password and permission password, 
+   however all permission restrictions are removed even if permission password is not found.
