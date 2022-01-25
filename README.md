@@ -2,7 +2,7 @@
 **Craker** is a brute force password recovery tool written entirely in python. It is a console app with no fancy gui.
 
 ## How to Use
-1. Either download windows executable *(craker.exe file)* or python script *(craker.py file)*. I recommend using python script as its little bit fast and interperater give traceback of errors if program crash but you'll need to have python *(probably latest version)* installed with required modules in your system.
+1. Either download windows executable *(craker.exe file)* or python script *(craker.py file)* from [Releases](https://github.com/ankitminz/archive_recovery_tool/releases). I recommend using python script as its little bit fast and interperater give traceback of errors if program crash but you'll need to have python *(probably latest version)* installed with required modules in your system.
 2. If you are trying to recover password of rar file then put UnRAR.exe in same directory of craker.exe or craker.py. You'll need to download WinRAR from https://www.win-rar.com/start.html?&L=0. Default directory of UnRAR.exe is `C:\Program Files (x86)\WinRAR\` or `C:\Program Files\WinRAR\` depending on whether it is 32-bit or 64-bit.
 3. Then run the executable by double clicking it or python script from terminal *(cmd or powershell)* and follow instructions.
 
