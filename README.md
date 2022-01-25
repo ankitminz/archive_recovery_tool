@@ -12,9 +12,9 @@
 
 ## Supported file formats:
 * zip
-* 7z
-* rar
-* pdf
+* 7z *with unencrypted file names*
+* rar *with unencrypted file names*
+* pdf *encrypted with RC4 40 or RC4 128*
 
 ## Supported platform:
 * Windows 10
