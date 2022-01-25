@@ -17,7 +17,7 @@ Done-
 
 
 Known Issue-
-1. Program is neither crashing nor showing an error and in case of encrypted file names in rar.
+1. Program is neither crashing nor showing error in case of encrypted file names in rar.
    And shows wrong password found.
 
 2. Pdf file with only permission restriction show wrong password found and those file with
