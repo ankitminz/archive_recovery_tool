@@ -1,3 +1,6 @@
+> [!NOTE]
+> **This project is not maintained anymore**
+
 # Craker - Password Recovery Tool
 **Craker** is a brute force password recovery tool written entirely in python. It is a console app with no fancy gui.
 
